@@ -48,17 +48,13 @@ class DecoderRNN(nn.Module):
     def sample(self, inputs, states=None, max_len=20):
         sampled_ids = []
         for i in range(max_len):
-               
             hiddens, states = self.lstm(inputs, states)
             outputs = self.linear(hiddens.squeeze(1))
             
-            maxval, idx = outputs.min(1)
-            print (maxval)
-            print (idx)
+            maxval, idx = outputs.max(1)
+         
             predicted = idx 
-           # predicted = outputs.max(0)[1].data
-#             print("predicted:")
-#             print(predicted.data.tolist()[0])
+               
             sampled_ids.append(predicted.data.tolist()[0])
             inputs = self.embed(predicted)
             inputs = inputs.unsqueeze(1)
